@@ -1,0 +1,439 @@
+<!DOCTYPE HTML>
+<!--
+	Strata by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="en-GB">
+	<head>
+		<title>Interests – Paul Schuler</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Music, tea, books and other things Paul Schuler enjoys." />
+		<meta property="og:title" content="Interests – Paul Schuler" />
+		<meta property="og:description" content="Music, tea, books and other things Paul Schuler enjoys." />
+		<meta property="og:type" content="website" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/site.css" />
+		<style>
+			/* Concert timeline */
+						#concert-timeline {
+							margin-top: 2em;
+							position: relative;
+						}
+			
+						.concert-controls {
+							display: flex;
+							gap: 1em;
+							align-items: center;
+							flex-wrap: wrap;
+							margin-bottom: 1.5em;
+						}
+			
+						.concert-controls label {
+							margin: 0;
+						}
+			
+						.concert-controls input[type="search"] {
+							max-width: 20em;
+							margin: 0;
+						}
+			
+						.concert-count {
+							font-size: 0.9em;
+							color: #888;
+							margin: 0;
+						}
+			
+						.timeline-wrap {
+							position: relative;
+							overflow-x: auto;
+							overflow-y: hidden;
+							padding: 1em 0 1.5em;
+							-webkit-overflow-scrolling: touch;
+						}
+			
+						#concert-svg {
+							display: block;
+							min-width: 900px;
+							width: 100%;
+							height: 260px;
+							overflow: visible;
+						}
+			
+						.timeline-axis {
+							stroke: #bbb;
+							stroke-width: 1;
+						}
+			
+						.timeline-tick {
+							stroke: #ccc;
+							stroke-width: 1;
+						}
+			
+						.timeline-year {
+							fill: #777;
+							font-size: 12px;
+							font-family: inherit;
+						}
+			
+						.concert-dot {
+							fill: #555;
+							stroke: #fff;
+							stroke-width: 2;
+							cursor: pointer;
+							transition: r 0.12s ease, fill 0.12s ease;
+						}
+			
+						.concert-dot:hover,
+						.concert-dot:focus {
+							fill: #222;
+							r: 7;
+						}
+			
+						.concert-tooltip {
+							position: absolute;
+							z-index: 20;
+							pointer-events: none;
+							background: rgba(35, 35, 35, 0.96);
+							color: #fff;
+							padding: 0.8em 1em;
+							border-radius: 4px;
+							font-size: 0.9em;
+							line-height: 1.45;
+							max-width: 260px;
+							box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+							opacity: 0;
+							transform: translateY(4px);
+							transition: opacity 0.12s ease, transform 0.12s ease;
+						}
+			
+						.concert-tooltip.visible {
+							opacity: 1;
+							transform: translateY(0);
+						}
+			
+						.concert-tooltip strong {
+							display: block;
+							margin-bottom: 0.2em;
+						}
+			
+						.timeline-message {
+							color: #888;
+							padding: 1em 0;
+						}
+			
+						@media screen and (max-width: 736px) {
+							#concert-svg {
+								height: 220px;
+							}
+			
+							.concert-tooltip {
+								max-width: 220px;
+								font-size: 0.85em;
+							}
+						}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="../" class="image avatar"><img src="../images/avatar.jpg" alt="Portrait of Paul Schuler" /></a>
+					<h1>Paul Schuler</h1>
+					<nav id="site-nav" aria-label="Main"><ul><li><a href="../">Home</a></li><li><a href="../research/">Research</a></li><li><a href="../interests/" aria-current="page">Interests</a></li><li><a href="../photography/">Photography</a></li><li><a href="https://paulschulerdotcom.wordpress.com/wp-content/uploads/2023/10/cv_long.pdf" target="_blank" rel="noopener">CV</a></li></ul></nav>
+				</div>
+			</header>
+
+		<!-- Main -->
+			<div id="main">
+
+				<section id="interests">
+					<header class="major"><h2>Interests</h2></header>
+					<p>From music to tea to books, I love to enjoy and discuss anything.</p>
+				</section>
+
+				<section id="concerts">
+					<h2>Concerts</h2>
+					<p>Every dot is a concert I went to. Hover over a dot, or tab to it, for the details.</p>
+					<div class="concert-controls">
+						<label for="concert-search">Search artist</label>
+						<input type="search" id="concert-search" placeholder="e.g. Big Thief" autocomplete="off" />
+						<p class="concert-count" id="concert-count" aria-live="polite"></p>
+					</div>
+					<div id="concert-timeline"><p class="timeline-message">Loading concerts…</p></div>
+				</section>
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<ul class="icons">
+						<li><a href="https://github.com/PaulKSchuler" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						<li><a href="https://x.com/paulschuler14" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="https://www.sps.ed.ac.uk/staff/paul-schuler" class="icon solid fa-university"><span class="label">University of Edinburgh profile</span></a></li>
+						<li><a href="mailto:p.k.schuler@sms.ed.ac.uk" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+					</ul>
+					<ul class="copyright">
+						<li>&copy; Paul Schuler</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+			<script>
+
+			(function () {
+				"use strict";
+
+				const timelineRoot = document.getElementById("concert-timeline");
+				const searchInput = document.getElementById("concert-search");
+				const countElement = document.getElementById("concert-count");
+
+				if (!timelineRoot || !searchInput) return;
+
+				let concerts = [];
+				let filteredConcerts = [];
+
+				function parseDate(value) {
+					if (!value) return null;
+					if (value instanceof Date && !Number.isNaN(value.getTime())) return value;
+
+					const text = String(value).trim();
+
+					// ISO: YYYY-MM-DD
+					let match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+					if (match) {
+						const date = new Date(Date.UTC(
+							Number(match[1]), Number(match[2]) - 1, Number(match[3])
+						));
+						return Number.isNaN(date.getTime()) ? null : date;
+					}
+
+					// European: DD/MM/YYYY or DD.MM.YYYY
+					match = text.match(/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})$/);
+					if (match) {
+						const date = new Date(Date.UTC(
+							Number(match[3]), Number(match[2]) - 1, Number(match[1])
+						));
+						return Number.isNaN(date.getTime()) ? null : date;
+					}
+
+					const date = new Date(text);
+					return Number.isNaN(date.getTime()) ? null : date;
+				}
+
+				function formatDate(date) {
+					return new Intl.DateTimeFormat(undefined, {
+						day: "numeric",
+						month: "long",
+						year: "numeric",
+						timeZone: "UTC"
+					}).format(date);
+				}
+
+				function escapeHtml(value) {
+					return String(value ?? "")
+						.replace(/&/g, "&amp;")
+						.replace(/</g, "&lt;")
+						.replace(/>/g, "&gt;")
+						.replace(/"/g, "&quot;")
+						.replace(/'/g, "&#039;");
+				}
+
+				function getField(row, names) {
+					const keys = Object.keys(row);
+					for (const name of names) {
+						const exact = keys.find(k => k.trim().toLowerCase() === name.toLowerCase());
+						if (exact !== undefined) return row[exact];
+					}
+					return "";
+				}
+
+				function showTooltip(dot, concert, wrap) {
+					const tooltip = wrap.querySelector(".concert-tooltip");
+					const place = concert.place;
+					const venue = concert.venue;
+
+					let html = "<strong>" + escapeHtml(concert.band) + "</strong>";
+					html += escapeHtml(formatDate(concert.date));
+
+					if (venue) html += "<br>" + escapeHtml(venue);
+					if (place) html += "<br>" + escapeHtml(place);
+
+					if (concert.link) {
+						html += '<br><a href="' + escapeHtml(concert.link) +
+							'" target="_blank" rel="noopener noreferrer" style="color:#fff;text-decoration:underline;">Setlist</a>';
+					}
+
+					tooltip.innerHTML = html;
+
+					const wrapRect = wrap.getBoundingClientRect();
+					const dotRect = dot.getBoundingClientRect();
+
+					let left = dotRect.left - wrapRect.left + dotRect.width / 2;
+					let top = dotRect.top - wrapRect.top - tooltip.offsetHeight - 10;
+
+					left = Math.max(8, Math.min(left, wrap.clientWidth - tooltip.offsetWidth - 8));
+					if (top < 8) top = dotRect.bottom - wrapRect.top + 10;
+
+					tooltip.style.left = left + "px";
+					tooltip.style.top = top + "px";
+					tooltip.classList.add("visible");
+				}
+
+				function hideTooltip(wrap) {
+					const tooltip = wrap.querySelector(".concert-tooltip");
+					if (tooltip) tooltip.classList.remove("visible");
+				}
+
+				function renderTimeline() {
+					if (!filteredConcerts.length) {
+						timelineRoot.innerHTML = '<p class="timeline-message">No concerts found.</p>';
+						countElement.textContent = "";
+						return;
+					}
+
+					const dates = filteredConcerts.map(d => d.date.getTime());
+					const minTime = Math.min(...dates);
+					const maxTime = Math.max(...dates);
+					const yearMs = 365.2425 * 24 * 60 * 60 * 1000;
+
+					const start = minTime - yearMs * 0.5;
+					const end = maxTime + yearMs * 0.5;
+					const yearStart = new Date(start).getUTCFullYear();
+					const yearEnd = new Date(end).getUTCFullYear();
+
+					const firstTick = Math.ceil(yearStart / 5) * 5;
+					const years = [];
+					for (let year = firstTick; year <= yearEnd; year += 5) years.push(year);
+
+					const width = Math.max(900, years.length * 130);
+					const height = 260;
+					const leftPad = 30;
+					const rightPad = 30;
+					const axisY = 170;
+					const usableWidth = width - leftPad - rightPad;
+
+					function xForTime(time) {
+						return leftPad + ((time - start) / (end - start)) * usableWidth;
+					}
+
+					let svg = '<svg id="concert-svg" viewBox="0 0 ' + width + ' ' + height +
+						'" role="img" aria-label="Timeline of concerts">';
+
+					svg += '<line class="timeline-axis" x1="' + leftPad + '" y1="' + axisY +
+						'" x2="' + (width - rightPad) + '" y2="' + axisY + '"></line>';
+
+					years.forEach(year => {
+						const x = xForTime(Date.UTC(year, 0, 1));
+						svg += '<line class="timeline-tick" x1="' + x + '" y1="55" x2="' +
+							x + '" y2="' + (axisY + 10) + '"></line>';
+						svg += '<text class="timeline-year" x="' + x + '" y="' +
+							(axisY + 30) + '" text-anchor="middle">' + year + '</text>';
+					});
+
+					// Four vertical levels prevent dense concert dates from sitting on top of each other.
+					const levels = [axisY - 18, axisY - 42, axisY - 66, axisY - 90];
+					const occupied = levels.map(() => []);
+
+					filteredConcerts.forEach((concert, index) => {
+						const x = xForTime(concert.date.getTime());
+						let level = 0;
+
+						for (let i = 0; i < levels.length; i++) {
+							if (!occupied[i].some(prevX => Math.abs(prevX - x) < 13)) {
+								level = i;
+								break;
+							}
+						}
+
+						occupied[level].push(x);
+						const y = levels[level];
+
+						svg += '<circle class="concert-dot" tabindex="0" cx="' + x + '" cy="' + y +
+							'" r="5" data-index="' + index + '" aria-label="' +
+							escapeHtml(concert.band + ", " + formatDate(concert.date) +
+								(concert.venue ? ", " + concert.venue : "") +
+								(concert.place ? ", " + concert.place : "")) + '"></circle>';
+					});
+
+					svg += "</svg>";
+
+					timelineRoot.innerHTML =
+						'<div class="timeline-wrap">' + svg +
+						'<div class="concert-tooltip" role="tooltip"></div></div>';
+
+					const wrap = timelineRoot.querySelector(".timeline-wrap");
+
+					timelineRoot.querySelectorAll(".concert-dot").forEach(dot => {
+						const concert = filteredConcerts[Number(dot.dataset.index)];
+						dot.addEventListener("mouseenter", () => showTooltip(dot, concert, wrap));
+						dot.addEventListener("mouseleave", () => hideTooltip(wrap));
+						dot.addEventListener("focus", () => showTooltip(dot, concert, wrap));
+						dot.addEventListener("blur", () => hideTooltip(wrap));
+					});
+
+					countElement.textContent =
+						filteredConcerts.length + (filteredConcerts.length === 1 ? " concert" : " concerts");
+				}
+
+				function applyFilter() {
+					const query = searchInput.value.trim().toLowerCase();
+					filteredConcerts = concerts.filter(concert =>
+						!query || concert.band.toLowerCase().includes(query)
+					);
+					renderTimeline();
+				}
+
+				async function loadConcerts() {
+					try {
+						const response = await fetch("../concert_lists.ods", { cache: "no-store" });
+						if (!response.ok) throw new Error("Could not load concert lists.ods");
+
+						const buffer = await response.arrayBuffer();
+						const workbook = XLSX.read(buffer, { type: "array", cellDates: true });
+
+						const sheetName = workbook.SheetNames[0];
+						const sheet = workbook.Sheets[sheetName];
+						const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+						concerts = rows.map(row => {
+							const date = parseDate(getField(row, ["Date"]));
+							const band = String(getField(row, ["Artist", "Band"])).trim();
+
+							if (!date || !band) return null;
+
+							return {
+								date,
+								band,
+								venue: String(getField(row, ["Venue"])).trim(),
+								place: String(getField(row, ["Place", "City"])).trim(),
+								link: String(getField(row, ["Link to setlist", "Setlist", "Link"])).trim()
+							};
+						}).filter(Boolean).sort((a, b) => a.date - b.date);
+
+						applyFilter();
+					} catch (error) {
+						console.error(error);
+						timelineRoot.innerHTML =
+							'<p class="timeline-message">Could not load <code>concert_lists.ods</code>.</p>';
+						countElement.textContent = "";
+					}
+				}
+
+				searchInput.addEventListener("input", applyFilter);
+				loadConcerts();
+			})();
+			
+			</script>
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,127 @@
+/* Site additions on top of Strata (HTML5 UP) */
+
+#header h1 {
+	color: #ffffff;
+	font-size: 3em;
+	line-height: 1.2em;
+	margin: 0 0 0.75em 0;
+}
+
+/* Main navigation in the sidebar */
+#site-nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#site-nav li {
+	padding: 0;
+}
+
+#site-nav a {
+	border-bottom: 0;
+	color: rgba(255, 255, 255, 0.65);
+	display: inline-block;
+	font-size: 1.05em;
+	letter-spacing: 0.05em;
+	padding: 0.2em 0;
+	text-decoration: none;
+	transition: color 0.2s ease-in-out;
+}
+
+#site-nav a:hover,
+#site-nav a[aria-current="page"] {
+	color: #ffffff;
+}
+
+#site-nav a[aria-current="page"] {
+	border-bottom: solid 2px #49bf9d;
+}
+
+/* On small screens the sidebar becomes a top banner: show the menu in one row */
+@media screen and (max-width: 980px) {
+	#header h1 { font-size: 2em; margin-bottom: 0.5em; }
+	#site-nav ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 1.25em; }
+}
+
+/* Photo galleries */
+.gallery {
+	display: grid;
+	gap: 0.5em;
+	grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+	margin: 0 0 2em 0;
+}
+
+.gallery a {
+	aspect-ratio: 1 / 1;
+	background: #efefef;
+	border: 0;
+	border-radius: 0.35em;
+	display: block;
+	overflow: hidden;
+}
+
+.gallery img {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease, opacity 0.3s ease;
+	width: 100%;
+}
+
+.gallery a:hover img,
+.gallery a:focus img {
+	opacity: 0.85;
+	transform: scale(1.04);
+}
+
+/* Lightbox */
+.lightbox {
+	align-items: center;
+	background: rgba(20, 16, 14, 0.94);
+	display: none;
+	inset: 0;
+	justify-content: center;
+	position: fixed;
+	z-index: 10000;
+}
+
+.lightbox.open { display: flex; }
+
+.lightbox figure {
+	margin: 0;
+	max-height: 92vh;
+	max-width: 92vw;
+	text-align: center;
+}
+
+.lightbox img {
+	display: block;
+	max-height: 86vh;
+	max-width: 92vw;
+	margin: 0 auto;
+}
+
+.lightbox figcaption {
+	color: rgba(255, 255, 255, 0.7);
+	font-size: 0.85em;
+	margin-top: 0.75em;
+}
+
+.lightbox button {
+	background: transparent;
+	border: 0;
+	box-shadow: none;
+	color: rgba(255, 255, 255, 0.8);
+	cursor: pointer;
+	font-size: 2.5em;
+	height: auto;
+	line-height: 1;
+	padding: 0.25em 0.5em;
+	position: absolute;
+}
+
+.lightbox button:hover { color: #ffffff; background: transparent; }
+.lightbox .lb-close { right: 0.25em; top: 0.25em; }
+.lightbox .lb-prev { left: 0.25em; top: 50%; transform: translateY(-50%); }
+.lightbox .lb-next { right: 0.25em; top: 50%; transform: translateY(-50%); }
