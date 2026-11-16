@@ -125,3 +125,102 @@
 .lightbox .lb-close { right: 0.25em; top: 0.25em; }
 .lightbox .lb-prev { left: 0.25em; top: 50%; transform: translateY(-50%); }
 .lightbox .lb-next { right: 0.25em; top: 50%; transform: translateY(-50%); }
+
+/* Interactive network (assets/js/network.js) */
+.network { margin: 0 0 2em 0; position: relative; }
+
+.network-toolbar {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.75em;
+}
+
+.network-toolbar .button { margin: 0; }
+.network-stats, .network-muted { color: #a2a2a2; font-size: 0.85em; margin: 0; }
+
+.network-stage {
+	background: #fafafa;
+	border: solid 1px #efefef;
+	border-radius: 0.35em;
+	overflow: hidden;
+	position: relative;
+}
+
+.network-svg {
+	display: block;
+	touch-action: pan-y;
+	user-select: none;
+	-webkit-user-select: none;
+	width: 100%;
+}
+
+.network-links line {
+	stroke: #b9b9b9;
+	stroke-linecap: round;
+	stroke-opacity: 0.45;
+	transition: stroke-opacity 0.2s ease, stroke 0.2s ease;
+}
+
+.network-node { cursor: grab; outline: none; }
+.network.dragging .network-node { cursor: grabbing; }
+.network-node circle { stroke: #ffffff; stroke-width: 1.5; touch-action: none; transition: opacity 0.2s ease; }
+.network-node text {
+	display: none;
+	fill: #585858;
+	font-size: 11px;
+	paint-order: stroke;
+	pointer-events: none;
+	stroke: rgba(250, 250, 250, 0.9);
+	stroke-linejoin: round;
+	stroke-width: 3px;
+}
+.network-node.show-label text { display: block; }
+
+/* Highlight a node and its neighbours, fade the rest */
+.network.has-focus .network-node:not(.hl) { opacity: 0.15; }
+.network.has-focus .network-node:not(.hl) text { display: none; }
+.network.has-focus .network-node.hl text { display: block; }
+.network.has-focus .network-links line { stroke-opacity: 0.06; }
+.network.has-focus .network-links line.hl { stroke: #6f6f6f; stroke-opacity: 0.8; }
+.network-node.active circle { stroke: #3a3a3a; stroke-width: 2; }
+.network-node.active text { fill: #222222; font-weight: bold; }
+.network-node:focus-visible circle { stroke: #3a3a3a; stroke-width: 2.5; }
+
+.network-tooltip {
+	background: rgba(40, 36, 34, 0.94);
+	border-radius: 0.35em;
+	color: rgba(255, 255, 255, 0.85);
+	font-size: 0.75em;
+	left: 0;
+	line-height: 1.5;
+	max-width: 17em;
+	opacity: 0;
+	padding: 0.6em 0.8em;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	transition: opacity 0.15s ease;
+	z-index: 2;
+}
+.network-tooltip.visible { opacity: 1; }
+.network-tooltip strong { color: #ffffff; display: block; font-size: 1.15em; }
+.network-tooltip span { display: block; }
+
+.network-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25em 1.25em;
+	list-style: none;
+	margin: 0.9em 0 0 0;
+	padding: 0;
+}
+.network-legend li { cursor: default; font-size: 0.85em; padding: 0; }
+.network-legend .swatch {
+	border-radius: 50%;
+	display: inline-block;
+	height: 0.75em;
+	margin-right: 0.4em;
+	width: 0.75em;
+}
+.network-message { color: #a2a2a2; }

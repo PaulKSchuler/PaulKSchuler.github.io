@@ -24,3 +24,10 @@ python3 -m http.server 8000
 ```
 
 then open <http://localhost:8000>.
+
+## Updating the tea network
+
+The network on `/interests/` is drawn by `assets/js/network.js` from `data/tea.graphml`.
+Replace that file with a new GraphML export to update it. Nodes need a `name` attribute
+and edges can carry a `weight`; the `community` attribute sets the colours (it was computed
+with Louvain community detection in networkx). Without it, all nodes get the same colour.

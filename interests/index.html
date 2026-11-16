@@ -9,9 +9,9 @@
 		<title>Interests – Paul Schuler</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="description" content="Music, tea, books and other things Paul Schuler enjoys." />
+		<meta name="description" content="Music, tea, books and other things Paul Schuler enjoys, including an interactive network of tea ingredients." />
 		<meta property="og:title" content="Interests – Paul Schuler" />
-		<meta property="og:description" content="Music, tea, books and other things Paul Schuler enjoys." />
+		<meta property="og:description" content="Music, tea, books and other things Paul Schuler enjoys, including an interactive network of tea ingredients." />
 		<meta property="og:type" content="website" />
 		<link rel="stylesheet" href="../assets/css/main.css" />
 		<link rel="stylesheet" href="../assets/css/site.css" />
@@ -152,6 +152,15 @@
 				<section id="interests">
 					<header class="major"><h2>Interests</h2></header>
 					<p>From music to tea to books, I love to enjoy and discuss anything.</p>
+				</section>
+
+				<section id="tea">
+					<h2>Tea network</h2>
+					<p>Every node is an ingredient in one of the teas I drink, and two ingredients are linked when they appear in the same tea. Thicker links mean the pair turns up in more teas, and bigger nodes are the more common ingredients. Colours mark groups of ingredients that tend to go together.</p>
+					<p class="network-muted">Drag the nodes to pull the network around. Hover over or tap an ingredient to see what it is combined with.</p>
+					<div class="network" data-src="../data/tea.graphml" data-label="name" data-group="community" data-weight="weight">
+						<p class="network-message">Loading the tea network…</p>
+					</div>
 				</section>
 
 				<section id="concerts">
@@ -434,6 +443,7 @@
 			<script src="../assets/js/breakpoints.min.js"></script>
 			<script src="../assets/js/util.js"></script>
 			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/network.js"></script>
 
 	</body>
 </html>
