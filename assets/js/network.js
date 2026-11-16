@@ -22,7 +22,7 @@
 	var LABEL_KEYS = ["label", "name", "Label", "Name", "title"];
 	var GROUP_KEYS = ["community", "group", "type", "category", "modularity_class", "cluster", "Group", "Type", "Category"];
 	var WEIGHT_KEYS = ["weight", "Weight", "value"];
-	var HIDDEN_ATTRS = ["x", "y", "r", "g", "b", "size"];
+	var HIDDEN_ATTRS = ["x", "y", "r", "g", "b", "size", "url", "kind", "about"];
 
 	function each(list, fn) { Array.prototype.forEach.call(list, fn); }
 	function pick(obj, keys) {
@@ -104,6 +104,23 @@
 		return { nodes: nodes, links: links };
 	}
 
+	function parseJSON(text) {
+		var raw = JSON.parse(text), byId = {}, nodes = [], links = [];
+		raw.nodes.forEach(function (d) {
+			var node = { id: String(d.id), data: d, neighbours: {}, degree: 0, strength: 0 };
+			byId[node.id] = node; nodes.push(node);
+		});
+		raw.links.forEach(function (d) {
+			var s = byId[String(d.source)], t = byId[String(d.target)];
+			if (!s || !t || s === t) return;
+			var link = { source: s, target: t, weight: Number(d.weight) || 1 };
+			links.push(link);
+			s.neighbours[t.id] = true; t.neighbours[s.id] = true;
+			s.degree++; t.degree++; s.strength += link.weight; t.strength += link.weight;
+		});
+		return { nodes: nodes, links: links };
+	}
+
 	/* ---------- Viewer ---------- */
 
 	function Viewer(root, graph) {
@@ -114,6 +131,7 @@
 		this.alpha = 1;
 		this.alphaTarget = 0;
 		this.running = false;
+		this.map = root.classList.contains("map");
 
 		var sample = this.nodes[0] ? this.nodes[0].data : {};
 		var labelKey = root.getAttribute("data-label") || pick(sample, LABEL_KEYS);
@@ -134,15 +152,16 @@
 		var maxStrength = Math.max.apply(null, this.nodes.map(function (n) { return n.strength; }).concat([1]));
 		var maxWeight = Math.max.apply(null, this.links.map(function (l) { return l.weight; }).concat([1]));
 		this.nodes.forEach(function (n) {
-			n.size = Math.sqrt(n.strength / maxStrength);
+			n.size = n.data.size !== undefined ? Number(n.data.size) : Math.sqrt(n.strength / maxStrength);
 			n.r = 4 + 12 * n.size;
-			n.colour = groupKey ? colour[n.group] : PALETTE[0];
+			n.colour = n.data.colour || (groupKey ? colour[n.group] : PALETTE[0]);
 		});
 
 		// Show labels for the best-connected nodes; the rest appear on hover.
 		var ranked = this.nodes.slice().sort(function (a, b) { return b.strength - a.strength; });
 		var showCount = this.nodes.length <= 40 ? this.nodes.length : Math.max(10, Math.round(this.nodes.length * 0.15));
 		ranked.forEach(function (n, i) { n.showLabel = i < showCount; });
+		if (root.getAttribute("data-labels") === "all") this.nodes.forEach(function (n) { n.showLabel = true; });
 
 		this.links.forEach(function (l) {
 			l.strength = 1 / Math.min(l.source.degree, l.target.degree);
@@ -167,6 +186,7 @@
 		root.classList.add("network-ready");
 
 		var toolbar = document.createElement("div");
+		if (this.map) toolbar.hidden = true;
 		toolbar.className = "network-toolbar";
 		toolbar.innerHTML =
 			'<p class="network-stats">' + this.nodes.length + " nodes · " + this.links.length + " links</p>" +
@@ -195,6 +215,8 @@
 		var focusable = this.nodes.length <= 150;
 		this.nodes.forEach(function (n) {
 			var g = el("g", { "class": "network-node" + (n.showLabel ? " show-label" : "") }, nodeLayer);
+			if (n.data.kind) g.setAttribute("data-kind", n.data.kind);
+			if (n.data.url) { g.setAttribute("role", "link"); }
 			if (focusable) { g.setAttribute("tabindex", "0"); g.setAttribute("aria-label", n.label); }
 			el("circle", { r: n.r.toFixed(1), fill: n.colour }, g);
 			var t = el("text", { x: (n.r + 3).toFixed(1), y: "0.35em" }, g);
@@ -209,7 +231,7 @@
 		stage.appendChild(tip);
 		this.tip = tip;
 
-		if (this.groupKey && this.groups.length > 1 && this.groups.length <= PALETTE.length) {
+		if (!this.map && this.groupKey && this.groups.length > 1 && this.groups.length <= PALETTE.length) {
 			var legend = document.createElement("ul");
 			legend.className = "network-legend";
 			this.groups.forEach(function (g, i) {
@@ -234,12 +256,14 @@
 
 	Viewer.prototype.resize = function () {
 		var w = this.stage.clientWidth || 600;
-		var h = Math.round(w < 560 ? Math.min(560, w * 1.25) : Math.max(380, Math.min(640, w * 0.75)));
+		var h = this.map
+			? Math.round(w < 560 ? Math.min(520, w * 1.15) : Math.max(380, Math.min(600, w * 0.6)))
+			: Math.round(w < 560 ? Math.min(560, w * 1.25) : Math.max(380, Math.min(640, w * 0.75)));
 
 		// Spacing and node size follow the space available per node, so phones get a tighter layout.
 		var perNode = w * h / Math.max(this.nodes.length, 1);
-		this.charge = -Math.max(50, Math.min(300, 0.025 * perNode));
-		this.linkDistance = Math.max(18, Math.min(80, 0.7 * Math.sqrt(perNode)));
+		this.charge = -Math.max(50, Math.min(this.map ? (w < 560 ? 260 : 650) : 300, (this.map ? 0.06 : 0.025) * perNode));
+		this.linkDistance = Math.max(18, Math.min(this.map ? 140 : 80, (this.map ? 1.1 : 0.7) * Math.sqrt(perNode)));
 		var scale = Math.max(0.6, Math.min(1, w / 700));
 		this.nodes.forEach(function (n) {
 			n.r = (4 + 12 * n.size) * scale;
@@ -288,7 +312,7 @@
 				f = this.charge * alpha / d2;
 				a.vx += dx * f; a.vy += dy * f;
 				b.vx -= dx * f; b.vy -= dy * f;
-				var minD = a.r + b.r + 2;
+				var minD = a.r + b.r + (this.map ? 26 : 2);
 				if (d2 < minD * minD) {
 					d = Math.sqrt(d2);
 					var push = (minD - d) / d * 0.5;
@@ -326,7 +350,7 @@
 			if (a.fx != null) { a.x = a.fx; a.y = a.fy; a.vx = 0; a.vy = 0; continue; }
 			a.vx *= 0.6; a.vy *= 0.6;
 			a.x += a.vx; a.y += a.vy;
-			var m = a.r + 2;
+			var m = a.r + (this.map ? 28 : 2);
 			a.x = Math.max(m, Math.min(this.width - m, a.x));
 			a.y = Math.max(m, Math.min(this.height - m, a.y));
 		}
@@ -440,6 +464,7 @@
 			self.alphaTarget = 0;
 			self.root.classList.remove("dragging");
 			// A tap without movement keeps the neighbourhood highlighted (useful on touch screens).
+			if (!drag.moved && n.data.url) { window.location.href = n.data.url; drag = null; return; }
 			self.pinned = !drag.moved ? n : null;
 			if (drag.moved && e.pointerType !== "mouse") self.clearFocus(true);
 			drag = null;
@@ -452,7 +477,10 @@
 
 		svg.addEventListener("focusin", function (e) { var n = nodeFrom(e.target); if (n) self.focusNode(n); });
 		svg.addEventListener("focusout", function () { if (!self.pinned) self.clearFocus(); });
-		this.root.addEventListener("keydown", function (e) { if (e.key === "Escape") self.clearFocus(true); });
+		this.root.addEventListener("keydown", function (e) {
+			if (e.key === "Escape") self.clearFocus(true);
+			if (e.key === "Enter" && self.focused && self.focused.data.url) window.location.href = self.focused.data.url;
+		});
 	};
 
 	Viewer.prototype.focusNode = function (n) {
@@ -482,6 +510,14 @@
 
 	Viewer.prototype.showTip = function (n) {
 		var self = this;
+		if (this.map) {
+			if (!n.data.about) { this.hideTip(); return; }
+			this.tip.innerHTML = "<strong>" + escapeHtml(n.label) + "</strong><span>" + escapeHtml(n.data.about) + "</span>";
+			this.tip.classList.add("visible");
+			this.tipNode = n;
+			this.placeTip(n);
+			return;
+		}
 		var partners = Object.keys(n.neighbours).map(function (id) {
 			var link = self.links.filter(function (l) { return (l.source === n && l.target.id === id) || (l.target === n && l.source.id === id); })[0];
 			var other = link.source === n ? link.target : link.source;
@@ -527,7 +563,14 @@
 
 	/* ---------- Boot ---------- */
 
-	each(document.querySelectorAll(".network[data-src]"), function (root) {
+	each(document.querySelectorAll(".network"), function (root) {
+		var inline = root.querySelector('script[type="application/json"]');
+		if (inline) {
+			try { new Viewer(root, parseJSON(inline.textContent)); }
+			catch (err) { console.error(err); root.innerHTML = '<p class="network-message">The network could not be loaded.</p>'; }
+			return;
+		}
+		if (!root.getAttribute("data-src")) return;
 		fetch(root.getAttribute("data-src"))
 			.then(function (r) { if (!r.ok) throw new Error("Could not load " + root.getAttribute("data-src")); return r.text(); })
 			.then(function (text) { new Viewer(root, parseGraphML(text)); })
